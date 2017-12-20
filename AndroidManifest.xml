@@ -7,6 +7,19 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
+    
+    <meta-data android:name="AA_DB_NAME" android:value="spelling" />
+	<meta-data android:name="AA_DB_VERSION" android:value="1" />
+	
+	<meta-data
+    android:name="AA_MODELS"
+    android:value="
+    	com.example.spellingsounds.persistence.ColorChart, 
+    	com.example.spellingsounds.persistence.ColorChartSounds,
+    	com.example.spellingsounds.persistence.Lesson,
+    	com.example.spellingsounds.persistence.Level,
+    	com.example.spellingsounds.persistence.Picture,
+    	com.example.spellingsounds.persistence.Word" />
 
     <application
         android:allowBackup="true"
