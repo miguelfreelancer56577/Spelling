@@ -7,13 +7,16 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
-    
-    <meta-data android:name="AA_DB_NAME" android:value="spelling" />
-	<meta-data android:name="AA_DB_VERSION" android:value="1" />
-	
-	<meta-data
-    android:name="AA_MODELS"
-    android:value="
+
+    <meta-data
+        android:name="AA_DB_NAME"
+        android:value="spelling" />
+    <meta-data
+        android:name="AA_DB_VERSION"
+        android:value="1" />
+    <meta-data
+        android:name="AA_MODELS"
+        android:value="
     	com.example.spellingsounds.persistence.ColorChart, 
     	com.example.spellingsounds.persistence.ColorChartSounds,
     	com.example.spellingsounds.persistence.Lesson,
@@ -34,6 +37,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.spellingsounds.activity.ColorChartActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_color_chart"
+            android:theme="@style/FullscreenTheme" >
         </activity>
     </application>
 
