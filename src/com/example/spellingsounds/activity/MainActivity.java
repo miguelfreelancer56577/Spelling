@@ -1,4 +1,9 @@
-package com.example.spellingsounds;
+package com.example.spellingsounds.activity;
+
+import com.example.spellingsounds.R;
+import com.example.spellingsounds.R.id;
+import com.example.spellingsounds.R.layout;
+import com.example.spellingsounds.R.menu;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
