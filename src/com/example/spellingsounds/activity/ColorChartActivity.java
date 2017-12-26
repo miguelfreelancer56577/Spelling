@@ -3,15 +3,25 @@ package com.example.spellingsounds.activity;
 import com.example.spellingsounds.R;
 import com.example.spellingsounds.R.id;
 import com.example.spellingsounds.R.layout;
+import com.example.spellingsounds.helper.DataBaseActiveAndroid;
 import com.example.spellingsounds.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout.LayoutParams;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -20,33 +30,8 @@ import android.view.View;
  * @see SystemUiHider
  */
 public class ColorChartActivity extends Activity {
-	/**
-	 * Whether or not the system UI should be auto-hidden after
-	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-	 */
-	private static final boolean AUTO_HIDE = true;
-
-	/**
-	 * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-	 * user interaction before hiding the system UI.
-	 */
-	private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-	/**
-	 * If set, will toggle the system UI visibility upon interaction. Otherwise,
-	 * will show the system UI visibility upon interaction.
-	 */
-	private static final boolean TOGGLE_ON_CLICK = true;
-
-	/**
-	 * The flags to pass to {@link SystemUiHider#getInstance}.
-	 */
-	private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-
-	/**
-	 * The instance of the {@link SystemUiHider} for this activity.
-	 */
-	private SystemUiHider mSystemUiHider;
+	
+	private final String log = ColorChartActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,112 +39,111 @@ public class ColorChartActivity extends Activity {
 
 		setContentView(R.layout.activity_color_chart);
 
-		final View controlsView = findViewById(R.id.fullscreen_content_controls);
-		final View contentView = findViewById(R.id.fullscreen_content);
-
-		// Set up an instance of SystemUiHider to control the system UI for
-		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView,
-				HIDER_FLAGS);
-		mSystemUiHider.setup();
-		mSystemUiHider
-				.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-					// Cached values.
-					int mControlsHeight;
-					int mShortAnimTime;
-
-					@Override
-					@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-					public void onVisibilityChange(boolean visible) {
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-							// If the ViewPropertyAnimator API is available
-							// (Honeycomb MR2 and later), use it to animate the
-							// in-layout UI controls at the bottom of the
-							// screen.
-							if (mControlsHeight == 0) {
-								mControlsHeight = controlsView.getHeight();
-							}
-							if (mShortAnimTime == 0) {
-								mShortAnimTime = getResources().getInteger(
-										android.R.integer.config_shortAnimTime);
-							}
-							controlsView
-									.animate()
-									.translationY(visible ? 0 : mControlsHeight)
-									.setDuration(mShortAnimTime);
-						} else {
-							// If the ViewPropertyAnimator APIs aren't
-							// available, simply show or hide the in-layout UI
-							// controls.
-							controlsView.setVisibility(visible ? View.VISIBLE
-									: View.GONE);
-						}
-
-						if (visible && AUTO_HIDE) {
-							// Schedule a hide().
-							delayedHide(AUTO_HIDE_DELAY_MILLIS);
-						}
-					}
-				});
-
-		// Set up the user interaction to manually show or hide the system UI.
-		contentView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (TOGGLE_ON_CLICK) {
-					mSystemUiHider.toggle();
-				} else {
-					mSystemUiHider.show();
-				}
+//		final View controlsView = findViewById(R.id.fullscreen_content_controls);
+		final ScrollView contentView = (ScrollView) findViewById(R.id.fullscreen_content);
+		
+		DataBaseActiveAndroid db = new DataBaseActiveAndroid(this);
+		
+//		main container for each item into it 
+		
+		Log.i(log, "Creating main container.");
+		
+		final LinearLayout mainContainer = new LinearLayout(this);
+		
+		mainContainer.setOrientation(LinearLayout.VERTICAL);
+		
+		mainContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		
+		mainContainer.setKeepScreenOn(true);
+		
+		Log.i(log, "Main container created.");
+		
+		int count=0;
+		
+//		create the first container item
+		
+		Log.i(log, "Creating firts item container");
+		
+		LinearLayout itemContainer = new LinearLayout(this);
+		
+		itemContainer.setOrientation(LinearLayout.HORIZONTAL);
+		
+		itemContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		
+		Log.i(log, "Item container created");
+		
+//		create 20 item for every sound.
+		
+		for (int i = 1; i <= 59; i++) {
+			
+			if( count == 2 ){
+				
+				Log.i(log, "Adding item container to the main container");
+				
+				mainContainer.addView(itemContainer);
+				
+				Log.i(log, "Item container added to the main container");
+				
+				Log.i(log, "Creating another item container");
+				
+				itemContainer = new LinearLayout(this);
+				
+				itemContainer.setOrientation(LinearLayout.HORIZONTAL);
+				
+				itemContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				
+				Log.i(log, "Item container created");
+				
+				count = 0;
+				
 			}
-		});
+			
+			Log.i(log, "Creating item with id: " + i);
+			
+			TextView item = (TextView) getLayoutInflater().inflate(R.layout.item_color_chart, null);
+			
+			Log.i(log, "Setting params.");
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 100, 1);
+			
+			item.setLayoutParams(layoutParams);
+			
+			itemContainer.addView(item);
+			
+			item.setId(i);
+			
+			item.setText(i + "");
+			
+			item.setOnTouchListener(itemTouchListener);
+			
+			Log.i(log, "item with id " + i + " was created.");
+			
+			count++;
+				
+		}
+		
+		Log.i(log, "adding all content to the view.");
+		
+		contentView.addView(mainContainer);
+		
+		Log.i(log, "Content added successfully.");
 
-		// Upon interacting with UI controls, delay any scheduled hide()
-		// operations to prevent the jarring behavior of controls going away
-		// while interacting with the UI.
-		findViewById(R.id.dummy_button).setOnTouchListener(
-				mDelayHideTouchListener);
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 
-		// Trigger the initial hide() shortly after the activity has been
-		// created, to briefly hint to the user that UI controls
-		// are available.
-		delayedHide(100);
 	}
+	
+	 View.OnTouchListener itemTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+        	
+        	Log.i(log, "You touched the record with id: " + view.getId());
+        	
+                return false;
+        }
+    };
 
-	/**
-	 * Touch listener to use for in-layout UI controls to delay hiding the
-	 * system UI. This is to prevent the jarring behavior of controls going away
-	 * while interacting with activity UI.
-	 */
-	View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-		@Override
-		public boolean onTouch(View view, MotionEvent motionEvent) {
-			if (AUTO_HIDE) {
-				delayedHide(AUTO_HIDE_DELAY_MILLIS);
-			}
-			return false;
-		}
-	};
 
-	Handler mHideHandler = new Handler();
-	Runnable mHideRunnable = new Runnable() {
-		@Override
-		public void run() {
-			mSystemUiHider.hide();
-		}
-	};
-
-	/**
-	 * Schedules a call to hide() in [delay] milliseconds, canceling any
-	 * previously scheduled calls.
-	 */
-	private void delayedHide(int delayMillis) {
-		mHideHandler.removeCallbacks(mHideRunnable);
-		mHideHandler.postDelayed(mHideRunnable, delayMillis);
-	}
 }

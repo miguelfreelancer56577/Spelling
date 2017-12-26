@@ -8,6 +8,7 @@ import com.example.spellingsounds.R.menu;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,8 +45,11 @@ public class MainActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+    	Intent i = new Intent();
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_color_chart ) {
+        	i.setClass(this, ColorChartActivity.class);
+        	startActivity(i);
             return true;
         }
         return super.onOptionsItemSelected(item);
