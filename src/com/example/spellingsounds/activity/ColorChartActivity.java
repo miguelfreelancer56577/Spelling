@@ -139,9 +139,15 @@ public class ColorChartActivity extends Activity {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
         	
-        	Log.i(log, "You touched the record with id: " + view.getId());
+        	Intent i = new Intent(ColorChartActivity.this, ColorChartDetailActivity.class);
         	
-                return false;
+        	Log.i(log, "calling chart detail with id: " + view.getId());
+        	
+        	i.putExtra("char_number", view.getId());
+        	
+        	startActivity(i);
+        	
+            return false;
         }
     };
 

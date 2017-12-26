@@ -1,5 +1,11 @@
 <resources>
 
     <color name="black_overlay">#66000000</color>
+    
+    <color name="main_container">#df3ee5</color>
+    
+    <color name="main_color">#e4e88c</color>
+    
+    <color name="opacity_color">#99000000</color>
 
 </resources>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#df3ee5"
+    android:background="@color/main_container"
     tools:context="com.example.spellingsounds.activity.ColorChartActivity" >
         
         <ScrollView
