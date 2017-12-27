@@ -1032,7 +1032,7 @@ containing a value of this type.
         public static final int icon=0x7f05002a;
         public static final int ifRoom=0x7f05000a;
         public static final int image=0x7f050027;
-        public static final int imageView1=0x7f050043;
+        public static final int image_chart_img=0x7f050043;
         public static final int image_chart_lbl=0x7f050042;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050029;
