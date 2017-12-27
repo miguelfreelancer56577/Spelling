@@ -15,9 +15,20 @@ public class ColorChart extends Model {
 	
 	@Column(name="char_description")
 	protected String charDescription;
+	
+	@Column(name="picture_base64")
+	protected String pictureBase64;
 
 	public int getCharNumber() {
 		return charNumber;
+	}
+
+	public String getPictureBase64() {
+		return pictureBase64;
+	}
+
+	public void setPictureBase64(String pictureBase64) {
+		this.pictureBase64 = pictureBase64;
 	}
 
 	public void setCharNumber(int charNumber) {
@@ -49,6 +60,8 @@ public class ColorChart extends Model {
 		result = prime * result
 				+ ((charName == null) ? 0 : charName.hashCode());
 		result = prime * result + charNumber;
+		result = prime * result
+				+ ((pictureBase64 == null) ? 0 : pictureBase64.hashCode());
 		return result;
 	}
 
@@ -73,13 +86,19 @@ public class ColorChart extends Model {
 			return false;
 		if (charNumber != other.charNumber)
 			return false;
+		if (pictureBase64 == null) {
+			if (other.pictureBase64 != null)
+				return false;
+		} else if (!pictureBase64.equals(other.pictureBase64))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "ColorChart [charNumber=" + charNumber + ", charName="
-				+ charName + ", charDescription=" + charDescription + "]";
+				+ charName + ", charDescription=" + charDescription
+				+ ", pictureBase64=" + pictureBase64 + "]";
 	}
 	
 }

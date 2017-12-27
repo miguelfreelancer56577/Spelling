@@ -13,14 +13,22 @@ public class Word extends Model {
 	@Column(name="wordDescription")
 	String wordDescription;
 	
-	@Column(name="id_picture")
-	protected Picture picture; 
+	@Column(name="picture_base64")
+	protected String pictureBase64;
 	
 	@Column(name="id_lesson")
 	protected Lesson lesson;
 
 	public String getWordName() {
 		return wordName;
+	}
+
+	public String getPictureBase64() {
+		return pictureBase64;
+	}
+
+	public void setPictureBase64(String pictureBase64) {
+		this.pictureBase64 = pictureBase64;
 	}
 
 	public void setWordName(String wordName) {
@@ -33,14 +41,6 @@ public class Word extends Model {
 
 	public void setWordDescription(String wordDescription) {
 		this.wordDescription = wordDescription;
-	}
-
-	public Picture getPicture() {
-		return picture;
-	}
-
-	public void setPicture(Picture picture) {
-		this.picture = picture;
 	}
 
 	public Lesson getLesson() {
@@ -56,7 +56,8 @@ public class Word extends Model {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((lesson == null) ? 0 : lesson.hashCode());
-		result = prime * result + ((picture == null) ? 0 : picture.hashCode());
+		result = prime * result
+				+ ((pictureBase64 == null) ? 0 : pictureBase64.hashCode());
 		result = prime * result
 				+ ((wordDescription == null) ? 0 : wordDescription.hashCode());
 		result = prime * result
@@ -78,10 +79,10 @@ public class Word extends Model {
 				return false;
 		} else if (!lesson.equals(other.lesson))
 			return false;
-		if (picture == null) {
-			if (other.picture != null)
+		if (pictureBase64 == null) {
+			if (other.pictureBase64 != null)
 				return false;
-		} else if (!picture.equals(other.picture))
+		} else if (!pictureBase64.equals(other.pictureBase64))
 			return false;
 		if (wordDescription == null) {
 			if (other.wordDescription != null)
@@ -99,8 +100,8 @@ public class Word extends Model {
 	@Override
 	public String toString() {
 		return "Word [wordName=" + wordName + ", wordDescription="
-				+ wordDescription + ", picture=" + picture + ", lesson="
-				+ lesson + "]";
+				+ wordDescription + ", pictureBase64=" + pictureBase64
+				+ ", lesson=" + lesson + "]";
 	}
 	
 }
