@@ -11,6 +11,7 @@ import com.example.spellingsounds.R.layout;
 import com.example.spellingsounds.persistence.ColorChart;
 import com.example.spellingsounds.util.SystemUiHider;
 import com.example.spellingsounds.util.ImageTool;
+import com.mangelt.image.base64.util.Convertor;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -187,7 +188,13 @@ public class ColorChartDetailActivity extends Activity {
 			
 			File file = new File(path);
 			
-			colorChart.setPictureBase64("");
+			try {
+				colorChart.setPictureBase64(Convertor.toBase64HtmlImageFormFile(file));
+			} catch (IOException e) {
+				Log.e(log, e.getMessage());
+			} catch (Exception e) {
+				Log.e(log, e.getMessage());
+			}
 			
 			image_chart_img.setImageURI(selectedImageUri);
 
@@ -221,13 +228,6 @@ public class ColorChartDetailActivity extends Activity {
 			final TextView descriptionChart = (TextView) findViewById(R.id.description_chart_txt);
 
 			final ImageView imageChart = (ImageView) findViewById(R.id.image_chart_img);
-			
-			try {
-				File img = tool.getFileFromImageView(imageChart);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
 			colorChart.setCharNumber(charNumber);
 
