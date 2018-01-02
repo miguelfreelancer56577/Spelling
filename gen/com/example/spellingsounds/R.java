@@ -1188,6 +1188,10 @@ containing a value of this type.
  color chart 
          */
         public static final int number_chart_lbl=0x7f0a0015;
+        public static final int required_general_msg=0x7f0a001c;
+        /**  messaging 
+         */
+        public static final int required_msg=0x7f0a001b;
         public static final int save_button=0x7f0a0012;
         public static final int title_activity_color_chart=0x7f0a001a;
         /**  activities name 

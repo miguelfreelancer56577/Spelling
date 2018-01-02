@@ -11,6 +11,8 @@ import com.example.spellingsounds.R;
 import com.example.spellingsounds.R.id;
 import com.example.spellingsounds.R.layout;
 import com.example.spellingsounds.persistence.ColorChart;
+import com.example.spellingsounds.util.AndroidUtils;
+import com.example.spellingsounds.util.FormValidator;
 import com.example.spellingsounds.util.SystemUiHider;
 import com.example.spellingsounds.util.ImageTool;
 import com.mangelt.image.base64.util.Convertor;
@@ -196,6 +198,10 @@ public class ColorChartDetailActivity extends Activity {
 
 		// event to select a image
 		image_chart_img.setOnTouchListener(mLoadTouchListener);
+		
+//		events to validate
+		nameChart.setOnFocusChangeListener(new FormValidator(this,nameChart));
+		descriptionChart.setOnFocusChangeListener(new FormValidator(this, descriptionChart));
 	}
 
 	@Override
@@ -286,21 +292,31 @@ public class ColorChartDetailActivity extends Activity {
 		@Override
 		public boolean onTouch(View view, MotionEvent motionEvent) {
 			
-			Log.i(log, "saving record.");
+			String msg = getString(R.string.required_general_msg);
 			
-			colorChart.setCharNumber(record);
+			Log.i(log, "validating fields.");
+			
+			if(AndroidUtils.nonEmpty(nameChart) && AndroidUtils.nonEmpty(descriptionChart)){
 
-			colorChart.setCharName(nameChart.getText().toString());
+				colorChart.setCharNumber(record);
 
-			colorChart.setCharDescription(descriptionChart.getText().toString());
-			
-			colorChart.save();
-			
-			Log.i(log, "record saved.");
-			
-			Toast.makeText(ColorChartDetailActivity.this, "Your record was saved successfully.",
-					Toast.LENGTH_SHORT).show();
+				colorChart.setCharName(nameChart.getText().toString());
 
+				colorChart.setCharDescription(descriptionChart.getText().toString());
+				
+				colorChart.save();
+				
+				Log.i(log, "record saved.");
+				
+				Toast.makeText(ColorChartDetailActivity.this, "Your record was saved successfully.",
+						Toast.LENGTH_SHORT).show();
+				
+				Log.i(log, "saving record.");
+				
+			}else{
+				Toast.makeText(ColorChartDetailActivity.this, msg, Toast.LENGTH_SHORT).show();
+			}
+			
 			return false;
 		}
 	};

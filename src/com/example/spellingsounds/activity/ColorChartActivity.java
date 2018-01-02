@@ -74,7 +74,7 @@ public class ColorChartActivity extends Activity {
 		
 //		create 20 item for every sound.
 		
-		for (int i = 1; i <= 3; i++) {
+		for (int i = 1; i <= 59; i++) {
 			
 			if( count == 2 ){
 				

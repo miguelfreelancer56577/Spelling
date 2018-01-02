@@ -24,5 +24,10 @@
     <!-- activities name -->
     <string name="title_activity_color_chart_detail">ColorChartDetailActivity</string>
     <string name="title_activity_color_chart">ColorChartActivity</string>
+    
+    <!-- messaging -->
+    <string name="required_msg">This field is required.</string>
+    <string name="required_general_msg">Complete all the fields required.</string>
+    
 
 </resources>
