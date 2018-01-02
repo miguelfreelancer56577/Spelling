@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.mangelt.image.base64.util.Convertor;
+
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -40,7 +42,7 @@ public class ImageTool {
 		
 		ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
 		
-		String imgName = UUID.randomUUID().toString() + ".jpg";
+		String imgName = randomName() + ".jpg";
 		
 		File imgFile = new File(ctx.getFilesDir().getAbsolutePath() + "/" + imgName);
 		
@@ -62,6 +64,22 @@ public class ImageTool {
 		fos.close();
 		
 		return imgFile;
+	} 
+	
+	public File getFileFromBase64String(String base64Html) throws IOException{
+		
+		String imageType  = Convertor.getTypeFromBase64Html(base64Html);
+		
+		String imageBase64 = Convertor.getValueFromBase64Html(base64Html);
+		
+		String tmpImage = concurrentDir() + randomName() + "." + imageType;
+		
+		File imgFile = new File(tmpImage);
+		
+		Convertor.toCopyFromBase64(imageBase64, imgFile);
+		
+		return imgFile;
+		
 	} 
 	
 	public String getPath(final Uri uri) 
@@ -136,7 +154,7 @@ public class ImageTool {
 	 * @param selectionArgs (Optional) Selection arguments used in the query.
 	 * @return The value of the _data column, which is typically a file path.
 	 */
-	protected static String getDataColumn(Context context, Uri uri, String selection,
+	protected String getDataColumn(Context context, Uri uri, String selection,
 	        String[] selectionArgs) {
 
 	    Cursor cursor = null;
@@ -164,7 +182,7 @@ public class ImageTool {
 	 * @param uri The Uri to check.
 	 * @return Whether the Uri authority is ExternalStorageProvider.
 	 */
-	protected static boolean isExternalStorageDocument(Uri uri) {
+	protected boolean isExternalStorageDocument(Uri uri) {
 	    return "com.android.externalstorage.documents".equals(uri.getAuthority());
 	}
 
@@ -172,7 +190,7 @@ public class ImageTool {
 	 * @param uri The Uri to check.
 	 * @return Whether the Uri authority is DownloadsProvider.
 	 */
-	protected static boolean isDownloadsDocument(Uri uri) {
+	protected boolean isDownloadsDocument(Uri uri) {
 	    return "com.android.providers.downloads.documents".equals(uri.getAuthority());
 	}
 
@@ -180,8 +198,20 @@ public class ImageTool {
 	 * @param uri The Uri to check.
 	 * @return Whether the Uri authority is MediaProvider.
 	 */
-	protected static boolean isMediaDocument(Uri uri) {
+	protected boolean isMediaDocument(Uri uri) {
 	    return "com.android.providers.media.documents".equals(uri.getAuthority());
+	}
+	
+	public String randomName (){
+		
+		return UUID.randomUUID().toString();
+		
+	}
+	
+	public String concurrentDir (){
+		
+		return ctx.getFilesDir().getAbsolutePath() + "/";
+		
 	}
 	
 }

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
+import com.activeandroid.query.Select;
 import com.example.spellingsounds.R;
 import com.example.spellingsounds.R.id;
 import com.example.spellingsounds.R.layout;
@@ -27,6 +29,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,13 +70,19 @@ public class ColorChartDetailActivity extends Activity {
 	private SystemUiHider mSystemUiHider;
 
 	// number of the chart to load
-	int charNumber;
+	private int record;
 
 	// reference to the image of the sound
-	ImageView image_chart_img;
+	private ImageView image_chart_img;
+	
+	private EditText nameChart;
+
+	private EditText descriptionChart;
+	
+	private TextView numberChart;
 
 	// utilities object
-	ImageTool tool;
+	private ImageTool tool;
 	
 	private ColorChart colorChart;
 
@@ -87,11 +96,18 @@ public class ColorChartDetailActivity extends Activity {
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final View contentView = findViewById(R.id.fullscreen_content);
-		
-		colorChart = new ColorChart();
 
 		// get image component
 		image_chart_img = (ImageView) findViewById(R.id.image_chart_img);
+		
+//		get name_chart_txt
+		nameChart = (EditText) findViewById(R.id.name_chart_txt);
+
+//		get description_chart_txt
+		descriptionChart = (EditText) findViewById(R.id.description_chart_txt);
+		
+//		get title of the view
+		numberChart = (TextView) findViewById(R.id.number_chart_lbl);
 
 		// object of utilities
 		tool = new ImageTool(this);
@@ -100,9 +116,23 @@ public class ColorChartDetailActivity extends Activity {
 
 		Intent intent = getIntent();
 
-		charNumber = intent.getIntExtra("char_number", 0);
-
-		Log.i(log, "char number got: " + charNumber);
+		record = intent.getIntExtra("char_number", 0);
+		
+		numberChart.setText(numberChart.getText().toString() + record);
+		
+		Log.i(log, "obtaining record with number chart: " + record);
+		
+		colorChart = new Select().from(ColorChart.class).where("char_number = ?", record).executeSingle();
+		
+		if(colorChart != null){
+			
+			toPopulateView();
+			
+		}else{
+			
+			colorChart = new ColorChart();
+			
+		}
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
@@ -186,10 +216,17 @@ public class ColorChartDetailActivity extends Activity {
 			
 			String path = tool.getPath(selectedImageUri);
 			
+			Log.i(log, "path of the file: " + path);
+			
+			Log.i(log, "get reference to the file");
 			File file = new File(path);
 			
 			try {
-				colorChart.setPictureBase64(Convertor.toBase64HtmlImageFormFile(file));
+				
+				String base64 = Convertor.toBase64HtmlImageFormFile(file);
+				
+				colorChart.setPictureBase64(base64);
+				
 			} catch (IOException e) {
 				Log.e(log, e.getMessage());
 			} catch (Exception e) {
@@ -202,6 +239,32 @@ public class ColorChartDetailActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 
 		}
+	}
+	
+	public void toPopulateView(){
+		
+		try {
+			
+			File imageFile = tool.getFileFromBase64String(colorChart.getPictureBase64());
+			
+			Uri imageUri = Uri.fromFile(imageFile);
+			
+//			set a image
+			image_chart_img.setImageURI(imageUri);
+			
+//			set name_chart_txt
+			nameChart.setText(colorChart.getCharName());
+
+//			set description_chart_txt
+			descriptionChart.setText(colorChart.getCharDescription());
+			
+			imageFile.delete();
+			
+		} catch (IOException e) {
+			Log.e(log, e.getMessage());
+		} 
+
+		
 	}
 
 	/**
@@ -222,18 +285,21 @@ public class ColorChartDetailActivity extends Activity {
 	View.OnTouchListener mSaveTouchListener = new View.OnTouchListener() {
 		@Override
 		public boolean onTouch(View view, MotionEvent motionEvent) {
-
-			final TextView nameChart = (TextView) findViewById(R.id.name_chart_txt);
-
-			final TextView descriptionChart = (TextView) findViewById(R.id.description_chart_txt);
-
-			final ImageView imageChart = (ImageView) findViewById(R.id.image_chart_img);
-
-			colorChart.setCharNumber(charNumber);
+			
+			Log.i(log, "saving record.");
+			
+			colorChart.setCharNumber(record);
 
 			colorChart.setCharName(nameChart.getText().toString());
 
 			colorChart.setCharDescription(descriptionChart.getText().toString());
+			
+			colorChart.save();
+			
+			Log.i(log, "record saved.");
+			
+			Toast.makeText(ColorChartDetailActivity.this, "Your record was saved successfully.",
+					Toast.LENGTH_SHORT).show();
 
 			return false;
 		}
